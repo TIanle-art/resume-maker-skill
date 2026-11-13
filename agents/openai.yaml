@@ -1,0 +1,7 @@
+interface:
+  display_name: "简历制作"
+  short_description: "从方向选择到简历、面试与投递复盘"
+  default_prompt: "使用 $resume-maker 帮我完成……"
+
+policy:
+  allow_implicit_invocation: true
