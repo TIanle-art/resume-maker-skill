@@ -1,0 +1,280 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.local/resume-data.schema.json",
+  "title": "Resume Data",
+  "description": "简历事实的唯一结构化来源。HTML、DOCX、PDF、LaTeX 由本文件渲染，不各自维护事实。",
+  "type": "object",
+  "required": [
+    "profile",
+    "education"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "排版偏好，不影响事实。",
+      "additionalProperties": true,
+      "properties": {
+        "language": {
+          "type": "string",
+          "enum": [
+            "zh",
+            "en",
+            "bilingual"
+          ]
+        },
+        "target_variant": {
+          "type": "string",
+          "description": "默认视觉变体，如 variant-black"
+        },
+        "page": {
+          "type": "string",
+          "enum": [
+            "one-page",
+            "two-page",
+            "auto"
+          ]
+        },
+        "is_deliverable": {
+          "type": "boolean",
+          "description": "true 表示这是投递版：不得含未完成类标注与示例数据"
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "required": [
+        "name",
+        "target_role"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "city": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "wechat_or_portfolio": {
+          "type": "string"
+        },
+        "language_cert": {
+          "type": "string"
+        },
+        "birth_place": {
+          "type": "string",
+          "description": "可选；03 默认不写出生年月/年龄等个人信息"
+        },
+        "photo": {
+          "type": "string",
+          "description": "真实照片路径（相对本 JSON）；留空表示不放照片。禁止使用示例照片。"
+        }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "description": "个人简介 2–3 句。不要写自我评价套话（如“吃苦耐劳”“学习能力强”）。"
+    },
+    "education": {
+      "$ref": "#/definitions/education_entries"
+    },
+    "experience": {
+      "$ref": "#/definitions/experience_entries"
+    },
+    "projects": {
+      "$ref": "#/definitions/projects"
+    },
+    "skills": {
+      "$ref": "#/definitions/lines"
+    },
+    "awards": {
+      "$ref": "#/definitions/lines"
+    },
+    "extra_sections": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "bullets"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "en": {
+            "type": "string"
+          },
+          "bullets": {
+            "$ref": "#/definitions/lines"
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "description": "校招/社招都至少要有经历或项目之一，否则简历没有内容可写。",
+      "anyOf": [
+        {
+          "required": [
+            "experience"
+          ]
+        },
+        {
+          "required": [
+            "projects"
+          ]
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "dates": {
+      "type": "string",
+      "pattern": "^(\\d{4}\\.\\d{2})(\\s*[-–]\\s*(\\d{4}\\.\\d{2}|至今|Present))?$",
+      "description": "YYYY.MM 或 YYYY.MM–YYYY.MM/至今；倒序要求由校验脚本检查"
+    },
+    "bullet": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "lines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/bullet"
+      }
+    },
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "dates",
+          "name",
+          "role"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "dates": {
+            "$ref": "#/definitions/dates"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bullets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/bullet"
+            }
+          }
+        }
+      }
+    },
+    "education_entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "dates",
+          "school",
+          "major_degree"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "dates": {
+            "$ref": "#/definitions/dates"
+          },
+          "school": {
+            "type": "string",
+            "minLength": 1
+          },
+          "major_degree": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bullets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/bullet"
+            }
+          }
+        }
+      }
+    },
+    "experience_entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "dates",
+          "organization",
+          "role"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "dates": {
+            "$ref": "#/definitions/dates"
+          },
+          "organization": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bullets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/bullet"
+            }
+          }
+        }
+      }
+    }
+  }
+}

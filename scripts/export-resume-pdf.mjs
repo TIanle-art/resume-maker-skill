@@ -3,11 +3,11 @@
  * 无头浏览器导出简历 PDF（preferCSSPageSize：让纸张尺寸以 CSS @page 为准）
  *
  * 用法：
- *   node scripts/export-resume-pdf.mjs [htmlPath] [--out out.pdf]
+ *   node scripts/export-resume-pdf.mjs <htmlPath> [--out out.pdf]
  *         [--paper-width 8.27] [--paper-height 11.69] [--browser <path>]
  *
  * 说明：
- * - 零依赖：Node 24 原生 WebSocket/fetch + 系统 Edge/Chrome 的 CDP 接口，
+ * - 零依赖：Node 22+ 原生 WebSocket/fetch + 系统 Edge/Chrome 的 CDP 接口，
  *   不引入 puppeteer-core，避免给插件仓库增加 node_modules / lockfile。
  * - Page.printToPDF 的 preferCSSPageSize:true 会让 PDF 纸张尺寸跟随 HTML 里
  *   @page { size: ... } 的声明（本模板为 210mm×297mm A4）；--paper-* 仅作
@@ -45,7 +45,8 @@ export function parseResumePdfArgs(args) {
     },
   });
   if (positionals.length > 1) throw new Error('只能指定一个 HTML 输入文件');
-  const htmlPath = resolve(positionals[0] ?? 'assets/resume-template-editable.html');
+  if (positionals.length === 0) throw new Error('请指定要导出的 HTML 文件：node scripts/export-resume-pdf.mjs <用户输出.html> --out <用户输出.pdf>');
+  const htmlPath = resolve(positionals[0]);
   const outPath = resolve(values.out ?? basename(htmlPath).replace(extname(htmlPath), '.pdf'));
   if (pathsReferToSameFile(htmlPath, outPath)) throw new Error('PDF 输出不能指向 HTML 输入文件');
   return {

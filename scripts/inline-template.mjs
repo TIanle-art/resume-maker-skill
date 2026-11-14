@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // 壳文件 -> 自包含 HTML。
 //
-// 背景：assets/templates-html/ 下 18 套模板的外框（style / 顶部工具栏 / script）已抽成共享
-// assets/frame/ 公共部件，模板文件为纯设计稿壳文件（内容 + <link ../frame/base.css>）。本脚本把壳文件
-// 确定性组装为包含共享功能的 HTML，交付用户前必须经过它。
+// 背景：assets/templates-html/ 下的模板外框（style / 顶部工具栏 / script）已抽成共享
+// assets/frame/ 公共部件，模板文件为纯设计稿壳文件（内容 + frame/base.css 链接）。本脚本把壳文件
+// 确定性组装为包含共享功能的 HTML，交付用户前必须经过它。内联逻辑在 scripts/lib/frame-inline.mjs，
+// 与 build-html.mjs 共用。
 //
 // 用法：
 //   node scripts/inline-template.mjs <壳文件> [输出文件]    # 无输出文件时打印到 stdout
@@ -11,50 +12,24 @@
 //   node scripts/inline-template.mjs --check <基准目录>      # 内联全部壳文件并与基准目录同名文件逐字节比对
 //
 // 零依赖；内联是确定性的——交付统一走本脚本即得一致产物，不维护逐字节基准。
-// --check 可对任意基准目录做临时逐字节比对，改动 frame/ 后用于人工自测。
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
+import { inlineShell } from './lib/frame-inline.mjs';
 
-const TEMPLATES_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'assets', 'templates-html');
-const FRAME_LINK = '<link rel="stylesheet" href="../frame/base.css">';
-
-// 壳文件预览专用的 SHELL-ONLY 规则块（frame/base.css 末尾），交付时整块移除。
-const SHELL_ONLY_RE = /\r?\n\/\* @@SHELL-ONLY-START@@[\s\S]*?@@SHELL-ONLY-END@@ \*\/\r?\n/;
+const HERE = fileURLToPath(import.meta.url);
+const TEMPLATES_DIR = path.resolve(path.dirname(HERE), '..', 'assets', 'templates-html');
+const FRAME_DIR = path.resolve(TEMPLATES_DIR, '..', 'frame');
 
 function inlineOne(shellPath) {
-  const frameDir = path.join(TEMPLATES_DIR, '..', 'frame');
   const html = fs.readFileSync(shellPath, 'utf8');
-
-  if (!html.includes(FRAME_LINK)) {
-    throw new Error(`不是壳文件（缺少 ${FRAME_LINK}）：${shellPath}`);
+  try {
+    return inlineShell(html, { frameDir: FRAME_DIR });
+  } catch (err) {
+    throw new Error(`${err.message}：${shellPath}`);
   }
-  if (!html.includes(' design-preview')) {
-    throw new Error(`不是壳文件（缺少 design-preview 类）：${shellPath}`);
-  }
-
-  const eol = html.includes('\r\n') ? '\r\n' : '\n';
-
-  // 1) 移除 design-preview 类（壳文件无 toolbar 的观感处理，交付产物不带）
-  let out = html.replace(' design-preview', '');
-
-  // 2) 内联共享工具栏与版式 CSS，剥离壳文件预览专用规则。
-  const css = fs.readFileSync(path.join(frameDir, 'base.css'), 'utf8')
-    .replace('@import url("toolbar.css");', fs.readFileSync(path.join(frameDir, 'toolbar.css'), 'utf8'))
-    .replace(SHELL_ONLY_RE, '');
-  out = out.replace(FRAME_LINK, `<style>${eol}${css}</style>`);
-
-  // 3) 注入顶部工具栏（壳文件 body 顶部）
-  const toolbar = fs.readFileSync(path.join(frameDir, 'toolbar.html'), 'utf8');
-  out = out.replace(/<body[^>]*>\r?\n/, (m) => m + toolbar);
-
-  // 4) 注入编辑脚本（</body> 前）
-  const editor = fs.readFileSync(path.join(frameDir, 'editor.js'), 'utf8');
-  out = out.replace('</body>', `<script>${eol}${editor}</script></body>`);
-
-  return out;
 }
 
 function inlineAll(outDir) {

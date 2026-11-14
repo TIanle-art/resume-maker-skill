@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>秋招投递进度</title>
+  <title>求职投递进度</title>
   <style>
     :root {
       --blue: #2f5597;
@@ -25,17 +25,13 @@
     }
     button, input, select, textarea { font: inherit; }
     button { cursor: pointer; }
-    .app { width: min(1220px, calc(100% - 36px)); margin: 0 auto; padding: 34px 0 48px; }
-    .hero {
-      display: flex; justify-content: space-between; align-items: flex-end; gap: 24px;
-      padding: 8px 4px 24px;
-    }
-    .eyebrow { margin: 0 0 7px; color: var(--blue); font-size: 13px; font-weight: 700; letter-spacing: .12em; }
+    .app { width: min(1460px, calc(100% - 36px)); margin: 0 auto; padding: 34px 0 48px; }
+    .hero { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; padding: 8px 4px 24px; }
     h1 { margin: 0; font-size: clamp(28px, 4vw, 42px); line-height: 1.15; letter-spacing: -.04em; }
     .hero p { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
     .hero-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
     .button {
-      display: inline-flex; justify-content: center; align-items: center; gap: 7px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
       min-height: 40px; padding: 0 15px; border: 1px solid transparent; border-radius: 10px;
       color: #fff; background: var(--blue); font-size: 14px; font-weight: 700;
       transition: .18s ease;
@@ -44,10 +40,7 @@
     .button.secondary { color: var(--blue); background: var(--white); border-color: #d9e1ee; }
     .button.secondary:hover { background: var(--blue-soft); }
     .button.ghost { color: #5a667a; background: transparent; border-color: #d9e1ee; }
-    .button.danger { color: #b42318; background: #fff3f2; border-color: #f2c6c1; }
-    .stats {
-      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px;
-    }
+    .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
     .stat {
       padding: 18px 20px; background: rgba(255,255,255,.9); border: 1px solid var(--line);
       border-radius: 16px; box-shadow: 0 5px 18px rgba(41, 66, 105, .05);
@@ -70,16 +63,16 @@
       border-color: var(--blue); box-shadow: 0 0 0 3px rgba(47,85,151,.12);
     }
     .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 850px; }
-    th, td { padding: 15px 17px; border-bottom: 1px solid #edf0f5; text-align: left; vertical-align: top; }
+    table { width: 100%; border-collapse: collapse; min-width: 1480px; }
+    th, td { padding: 15px 14px; border-bottom: 1px solid #edf0f5; text-align: left; vertical-align: top; }
     th { color: #667085; background: #fff; font-size: 12px; font-weight: 700; white-space: nowrap; }
     td { color: #263247; font-size: 14px; line-height: 1.55; }
     tbody tr:hover { background: #fafcff; }
     tbody tr:last-child td { border-bottom: 0; }
     .date { color: #59677c; white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .company { min-width: 150px; color: #172b4d; font-weight: 800; }
+    .company { min-width: 140px; color: #172b4d; font-weight: 800; }
     .position { min-width: 130px; }
-    .note { min-width: 170px; max-width: 270px; color: #667085; }
+    .note { min-width: 170px; max-width: 270px; color: #667085; white-space: pre-wrap; }
     .status {
       display: inline-flex; align-items: center; min-height: 27px; padding: 2px 10px; border-radius: 99px;
       font-size: 12px; font-weight: 700; white-space: nowrap;
@@ -98,7 +91,7 @@
     .footer { padding: 14px 4px 0; color: #8a95a6; font-size: 12px; text-align: right; }
     .modal-backdrop { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(15, 28, 51, .38); }
     .modal-backdrop.open { display: flex; }
-    .modal { width: min(560px, 100%); max-height: min(720px, calc(100vh - 40px)); overflow: auto; border-radius: 18px; background: #fff; box-shadow: 0 24px 70px rgba(17, 32, 57, .25); }
+    .modal { width: min(680px, 100%); max-height: min(760px, calc(100vh - 40px)); overflow: auto; border-radius: 18px; background: #fff; box-shadow: 0 24px 70px rgba(17, 32, 57, .25); }
     .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px; border-bottom: 1px solid var(--line); }
     .modal-head h2 { margin: 0; font-size: 20px; }
     .close { width: 32px; height: 32px; border: 0; border-radius: 8px; color: #667085; background: #f1f4f8; font-size: 20px; line-height: 1; }
@@ -111,7 +104,7 @@
     .modal-foot { display: flex; justify-content: flex-end; gap: 9px; padding: 0 22px 22px; }
     .required { color: #c0392b; }
     @media (max-width: 760px) {
-      .app { width: min(100% - 24px, 1220px); padding-top: 20px; }
+      .app { width: min(100% - 24px, 1460px); padding-top: 20px; }
       .hero { align-items: flex-start; flex-direction: column; }
       .hero-actions { justify-content: flex-start; }
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -125,11 +118,12 @@
       .app { width: 100%; padding: 0; }
       .hero { padding-top: 0; }
       .hero-actions, .filters, .row-actions, .footer, .panel-hint, .modal-backdrop { display: none !important; }
-      .panel, .stat { border: 1px solid #d9dee7; box-shadow: none; }
+      .panel, .stat { border: 1px solid #d9dee2; box-shadow: none; }
       .stats { margin-bottom: 12px; }
       .stat { padding: 10px 14px; }
       .stat-value { font-size: 20px; }
-      th, td { padding: 8px 9px; font-size: 10px; }
+      table { min-width: 0; }
+      th, td { padding: 6px; font-size: 8px; }
       .company { min-width: 0; }
       .note { max-width: none; }
     }
@@ -139,18 +133,19 @@
   <div class="app">
     <header class="hero">
       <div>
-        <h1>秋招投递进度</h1>
+        <h1>求职投递进度</h1>
         <p>把每一次投递、面试和反馈都记录下来，随时掌握求职节奏。</p>
       </div>
       <div class="hero-actions">
         <button class="button secondary" id="importButton" type="button">覆盖导入</button>
         <button class="button secondary" id="mergeImportButton" type="button">合并导入</button>
+        <button class="button secondary" id="exportMarkdownButton" type="button">导出 MD</button>
         <button class="button secondary" id="exportJsonButton" type="button">备份 JSON</button>
         <button class="button secondary" id="exportCsvButton" type="button">导出 CSV</button>
         <button class="button secondary" id="printButton" type="button">打印 / PDF</button>
         <button class="button" id="addButton" type="button">＋ 新增记录</button>
-        <input id="importInput" type="file" accept="application/json,.json" hidden>
-        <input id="mergeImportInput" type="file" accept="application/json,.json" hidden>
+        <input id="importInput" type="file" accept="application/json,.json,text/markdown,.md,.markdown" hidden>
+        <input id="mergeImportInput" type="file" accept="application/json,.json,text/markdown,.md,.markdown" hidden>
       </div>
     </header>
 
@@ -166,21 +161,21 @@
       <div class="panel-head">
         <div>
           <h2 class="panel-title">投递记录</h2>
-          <span class="panel-hint">数据仅保存在当前浏览器，建议定期导出备份。</span>
+          <span class="panel-hint">支持 JSON 与投递记录.md；数据仅保存在当前浏览器，请定期导出备份。</span>
         </div>
         <span class="panel-hint" id="resultHint">显示 0 条</span>
       </div>
       <div class="filters">
-        <div class="field search"><input id="searchInput" type="search" placeholder="搜索公司、岗位或备注…"></div>
+        <div class="field search"><input id="searchInput" type="search" placeholder="搜索公司、岗位、方向、城市或备注…"></div>
         <div class="field"><select id="statusFilter" aria-label="按进度筛选"><option value="">全部进度</option></select></div>
         <div class="field"><select id="sortSelect" aria-label="排序方式"><option value="date-desc">时间：新到旧</option><option value="date-asc">时间：旧到新</option><option value="company">公司：A-Z</option><option value="status">按进度</option></select></div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>时间</th><th>公司</th><th>岗位</th><th>进度</th><th>下一步</th><th>备注</th><th>操作</th></tr></thead>
+          <thead><tr><th>时间</th><th>公司</th><th>岗位</th><th>方向</th><th>类型</th><th>城市</th><th>渠道</th><th>简历版本</th><th>进度</th><th>下一步</th><th>薪资信息</th><th>备注</th><th>操作</th></tr></thead>
           <tbody id="recordBody"></tbody>
         </table>
-        <div class="empty" id="emptyState"><strong>还没有投递记录</strong>点击右上角“新增记录”，开始记录你的秋招进度。</div>
+        <div class="empty" id="emptyState"><strong>还没有投递记录</strong>点击右上角“新增记录”，或导入现有的投递记录.md。</div>
       </div>
     </section>
     <div class="footer">快捷键：按 <b>N</b> 新增记录，按 <b>Esc</b> 关闭弹窗</div>
@@ -194,9 +189,15 @@
         <div class="modal-field"><label for="timeInput">时间</label><input id="timeInput" type="time"></div>
         <div class="modal-field"><label for="companyInput">公司 <span class="required">*</span></label><input id="companyInput" type="text" placeholder="例如：示例科技有限公司" required></div>
         <div class="modal-field"><label for="positionInput">岗位</label><input id="positionInput" type="text" placeholder="例如：前端开发工程师"></div>
+        <div class="modal-field"><label for="directionInput">方向</label><input id="directionInput" type="text" placeholder="例如：软件开发"></div>
+        <div class="modal-field"><label for="typeInput">类型</label><select id="typeInput"><option value="">未注明</option></select></div>
+        <div class="modal-field"><label for="cityInput">城市</label><input id="cityInput" type="text" placeholder="例如：郑州"></div>
+        <div class="modal-field"><label for="channelInput">渠道</label><input id="channelInput" type="text" placeholder="例如：官网 / 内推"></div>
+        <div class="modal-field full"><label for="resumeVersionInput">简历版本</label><input id="resumeVersionInput" type="text" placeholder="例如：定制简历-某公司-某岗位.docx"></div>
         <div class="modal-field"><label for="statusInput">进度 <span class="required">*</span></label><select id="statusInput" required></select></div>
-        <div class="modal-field full"><label for="nextInput">下一步</label><input id="nextInput" type="text" placeholder="例如：准备笔试、等待面试反馈、跟进 HR"></div>
-        <div class="modal-field full"><label for="noteInput">备注</label><textarea id="noteInput" placeholder="记录岗位链接、面试时间、薪资范围或其他信息"></textarea></div>
+        <div class="modal-field"><label for="salaryInput">薪资信息</label><input id="salaryInput" type="text" placeholder="JD 或沟通中确认的信息"></div>
+        <div class="modal-field full"><label for="nextInput">下一步与日期</label><input id="nextInput" type="text" placeholder="例如：11 月 20 日 14:00 二面"></div>
+        <div class="modal-field full"><label for="noteInput">备注</label><textarea id="noteInput" placeholder="记录岗位链接、反馈或其他信息"></textarea></div>
       </form>
       <div class="modal-foot"><button class="button ghost" id="cancelButton" type="button">取消</button><button class="button" id="saveButton" type="submit" form="recordForm">保存记录</button></div>
     </div>
@@ -205,7 +206,9 @@
   <script>
     (() => {
       const STORAGE_KEY = 'offer-skills-application-tracker-v1';
+      const BACKUP_FORMAT = 'resume-maker-application-tracker';
       const statuses = ['待投递', '已投递', '笔试或测评', '一面', '二面', '三面及以上', 'HR 面', '等待结果', '已获 offer', '已接受', '未通过', '已放弃'];
+      const applicationTypes = ['校招', '实习', '社招'];
       const statusAliases = {
         '简历已投递': '已投递', '投递成功': '已投递', '新投递': '已投递',
         '简历筛选中': '等待结果', '待笔试': '笔试或测评', '笔试': '笔试或测评',
@@ -227,13 +230,20 @@
       const modalBackdrop = $('#modalBackdrop');
       const form = $('#recordForm');
       const dateInput = $('#dateInput');
+      const timeInput = $('#timeInput');
       const companyInput = $('#companyInput');
       const positionInput = $('#positionInput');
+      const directionInput = $('#directionInput');
+      const typeInput = $('#typeInput');
+      const cityInput = $('#cityInput');
+      const channelInput = $('#channelInput');
+      const resumeVersionInput = $('#resumeVersionInput');
       const statusInput = $('#statusInput');
+      const salaryInput = $('#salaryInput');
       const nextInput = $('#nextInput');
       const noteInput = $('#noteInput');
       const initialRecords = [];
-      const timeInput = $('#timeInput');
+      let trackerDocument = { markdown: null };
       let records = loadRecords();
       let editingId = null;
 
@@ -246,32 +256,69 @@
       function makeId() {
         return window.crypto?.randomUUID ? window.crypto.randomUUID() : `record-${Date.now()}-${Math.random().toString(16).slice(2)}`;
       }
+      function defaultUpdatedAt(item) {
+        return item.date ? `${item.date}T${item.time || ''}` : '';
+      }
+      function normalizeRecord(item = {}) {
+        const normalizedStatus = normalizeStatus(item.status);
+        return {
+          id: typeof item.id === 'string' && item.id.trim() ? item.id : makeId(),
+          date: String(item.date || ''),
+          time: String(item.time || ''),
+          company: String(item.company || '').trim(),
+          position: String(item.position || ''),
+          direction: String(item.direction || ''),
+          type: String(item.type || ''),
+          city: String(item.city || ''),
+          channel: String(item.channel || ''),
+          resumeVersion: String(item.resumeVersion || ''),
+          status: statuses.includes(normalizedStatus) ? normalizedStatus : '已投递',
+          next: String(item.next || ''),
+          salary: String(item.salary || ''),
+          note: String(item.note || ''),
+          updatedAt: String(item.updatedAt || defaultUpdatedAt(item))
+        };
+      }
+      function parseBackupValue(value) {
+        if (Array.isArray(value)) return { items: value, markdown: null };
+        if (value && typeof value === 'object' && Array.isArray(value.records)) {
+          return { items: value.records, markdown: typeof value.markdown === 'string' ? value.markdown : null };
+        }
+        throw new Error('备份必须是记录数组或包含 records 数组的对象');
+      }
       function loadRecords() {
         try {
           const saved = localStorage.getItem(STORAGE_KEY);
           if (!saved) return initialRecords.map((item) => ({ ...item }));
-          const value = JSON.parse(saved);
-          return Array.isArray(value) ? value.map(normalizeRecord).filter((item) => item.company) : initialRecords.map((item) => ({ ...item }));
+          const parsed = parseBackupValue(JSON.parse(saved));
+          trackerDocument.markdown = parsed.markdown;
+          return parsed.items.map(normalizeRecord).filter((item) => item.company);
         } catch { return initialRecords.map((item) => ({ ...item })); }
       }
-      function persist() { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); }
-      function normalizeRecord(item) {
-        return {
-          id: item.id || makeId(),
-          date: item.date || today(),
-          time: String(item.time || ''),
-          company: String(item.company || '').trim(),
-          position: String(item.position || '').trim(),
-          status: statuses.includes(normalizeStatus(item.status)) ? normalizeStatus(item.status) : '已投递',
-          next: String(item.next || ''),
-          note: String(item.note || ''),
-          updatedAt: item.updatedAt || `${item.date || ''}T${item.time || ''}`
-        };
+      function makeBackup(recordList = records, markdown = trackerDocument.markdown) {
+        return { format: BACKUP_FORMAT, version: 2, records: recordList, markdown };
+      }
+      function persist(nextRecords, nextMarkdown) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(makeBackup(nextRecords, nextMarkdown)));
+          return true;
+        } catch {
+          alert('保存失败：无法写入浏览器存储，现有记录未改变。请导出备份后检查浏览器存储权限或空间。');
+          return false;
+        }
+      }
+      function commitRecords(nextRecords, nextMarkdown = trackerDocument.markdown) {
+        if (!persist(nextRecords, nextMarkdown)) return false;
+        records = nextRecords;
+        trackerDocument.markdown = nextMarkdown;
+        render();
+        return true;
       }
       function recordKey(item) {
-        return `${item.company.replace(/\s+/g, '').toLocaleLowerCase('zh-CN')}\u0000${item.position.replace(/\s+/g, '').toLocaleLowerCase('zh-CN')}`;
+        const fields = ['company', 'position', 'direction', 'type', 'city', 'channel', 'date'];
+        return JSON.stringify(fields.map((field) => String(item[field] || '').replace(/\s+/g, '').toLocaleLowerCase('zh-CN')));
       }
-      function recency(item) { return item.updatedAt || `${item.date || ''}T${item.time || ''}`; }
+      function recency(item) { return item.updatedAt || defaultUpdatedAt(item); }
       function mergeRecords(current, incoming) {
         const byKey = new Map(current.map((item) => [recordKey(item), item]));
         const usedIds = new Set(current.map((item) => item.id));
@@ -288,28 +335,35 @@
             added += 1;
             continue;
           }
-          if (recency(item) >= recency(previous)) { byKey.set(key, { ...previous, ...item, id: previous.id }); updated += 1; }
+          if (recency(item) >= recency(previous)) {
+            byKey.set(key, { ...previous, ...item, id: previous.id });
+            updated += 1;
+          }
         }
         return { records: [...byKey.values()], added, updated };
       }
       function escapeHtml(value) {
         return String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
       }
-      function formatDate(value) {
-        if (!value) return '-';
-        const parts = value.split('-');
-        return parts.length === 3 ? `${parts[0]}.${parts[1]}.${parts[2]}` : value;
+      function formatDate(date, time = '') {
+        if (!date) return '-';
+        const parts = date.split('-');
+        const formatted = parts.length === 3 ? `${parts[0]}.${parts[1]}.${parts[2]}` : date;
+        return time ? `${formatted} ${time}` : formatted;
       }
       function populateStatuses() {
         $('#statusFilter').insertAdjacentHTML('beforeend', statuses.map((item) => `<option value="${item}">${item}</option>`).join(''));
         statusInput.innerHTML = statuses.map((item) => `<option value="${item}">${item}</option>`).join('');
+      }
+      function populateApplicationTypes() {
+        typeInput.insertAdjacentHTML('beforeend', applicationTypes.map((item) => `<option value="${item}">${item}</option>`).join(''));
       }
       function visibleRecords() {
         const query = $('#searchInput').value.trim().toLowerCase();
         const filter = $('#statusFilter').value;
         const sort = $('#sortSelect').value;
         const result = records.filter((item) => {
-          const haystack = [item.company, item.position, item.status, item.next, item.note].join(' ').toLowerCase();
+          const haystack = [item.company, item.position, item.direction, item.type, item.city, item.channel, item.resumeVersion, item.status, item.next, item.salary, item.note].join(' ').toLowerCase();
           return (!query || haystack.includes(query)) && (!filter || item.status === filter);
         });
         result.sort((a, b) => {
@@ -322,17 +376,27 @@
         });
         return result;
       }
+      function recordRowHtml(item) {
+        const text = (value) => escapeHtml(value || '-');
+        return `<tr>
+          <td class="date">${escapeHtml(formatDate(item.date, item.time))}</td>
+          <td class="company">${text(item.company)}</td>
+          <td class="position">${text(item.position)}</td>
+          <td>${text(item.direction)}</td>
+          <td>${text(item.type)}</td>
+          <td>${text(item.city)}</td>
+          <td>${text(item.channel)}</td>
+          <td>${text(item.resumeVersion)}</td>
+          <td><span class="status status-${statusTone(item.status)}">${text(item.status)}</span></td>
+          <td>${text(item.next)}</td>
+          <td>${text(item.salary)}</td>
+          <td class="note">${text(item.note)}</td>
+          <td><div class="row-actions"><button class="icon-button" data-edit="${escapeHtml(item.id)}" type="button">编辑</button><button class="icon-button delete" data-delete="${escapeHtml(item.id)}" type="button">删除</button></div></td>
+        </tr>`;
+      }
       function render() {
         const visible = visibleRecords();
-        body.innerHTML = visible.map((item) => `<tr>
-          <td class="date">${escapeHtml(formatDate(item.date))}</td>
-          <td class="company">${escapeHtml(item.company)}</td>
-          <td class="position">${escapeHtml(item.position || '-')}</td>
-          <td><span class="status status-${statusTone(item.status)}">${escapeHtml(item.status)}</span></td>
-          <td>${escapeHtml(item.next || '-')}</td>
-          <td class="note">${escapeHtml(item.note || '-')}</td>
-          <td><div class="row-actions"><button class="icon-button" data-edit="${item.id}" type="button">编辑</button><button class="icon-button delete" data-delete="${item.id}" type="button">删除</button></div></td>
-        </tr>`).join('');
+        body.innerHTML = visible.map(recordRowHtml).join('');
         emptyState.style.display = visible.length ? 'none' : 'block';
         $('#resultHint').textContent = `显示 ${visible.length} 条`;
         updateStats();
@@ -352,7 +416,13 @@
         timeInput.value = record?.time || '';
         companyInput.value = record?.company || '';
         positionInput.value = record?.position || '';
+        directionInput.value = record?.direction || '';
+        typeInput.value = record?.type || '';
+        cityInput.value = record?.city || '';
+        channelInput.value = record?.channel || '';
+        resumeVersionInput.value = record?.resumeVersion || '';
         statusInput.value = record?.status || '已投递';
+        salaryInput.value = record?.salary || '';
         nextInput.value = record?.next || '';
         noteInput.value = record?.note || '';
         modalBackdrop.classList.add('open');
@@ -361,14 +431,24 @@
       function closeModal() { modalBackdrop.classList.remove('open'); form.reset(); editingId = null; }
       function download(name, content, type) {
         const blob = new Blob([content], { type });
-        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = name; link.click();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = name;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
         setTimeout(() => URL.revokeObjectURL(link.href), 500);
       }
+      function csvCell(value) {
+        let text = String(value ?? '');
+        if (/^[=+\-@\t\r]/.test(text) || /^\s+[=+\-@]/.test(text)) text = `'${text}`;
+        return `"${text.replace(/"/g, '""')}"`;
+      }
       function exportCsv() {
-        const header = ['日期', '时间', '公司', '岗位', '进度', '下一步', '备注'];
-        const rows = records.map((item) => [item.date, item.time, item.company, item.position, item.status, item.next, item.note]);
-        const csv = [header, ...rows].map((row) => row.map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
-        download(`秋招投递进度-${today()}.csv`, '\ufeff' + csv, 'text/csv;charset=utf-8');
+        const header = ['公司', '岗位', '方向', '类型', '城市', '渠道', '投递日期', '时间', '简历版本', '状态', '下一步与日期', '薪资信息', '备注'];
+        const rows = records.map((item) => [item.company, item.position, item.direction, item.type, item.city, item.channel, item.date, item.time, item.resumeVersion, item.status, item.next, item.salary, item.note]);
+        const csv = [header, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n');
+        download(`求职投递进度-${today()}.csv`, '\ufeff' + csv, 'text/csv;charset=utf-8');
       }
       function isValidCalendarDate(value) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -378,15 +458,19 @@
         parsed.setUTCFullYear(year, month - 1, day);
         return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day;
       }
-      function normalizeImportedRecord(item, index, seenIds) {
+      function normalizeImportedRecord(item, index, seenIds, { allowEmptyDate = false } = {}) {
         const fail = (reason) => { throw new Error(`第 ${index + 1} 条：${reason}`); };
         if (!item || typeof item !== 'object' || Array.isArray(item)) fail('记录格式无效');
         if (typeof item.company !== 'string' || !item.company.trim()) fail('公司不能为空');
-        if (typeof item.date !== 'string' || !isValidCalendarDate(item.date)) fail('日期必须是有效的 YYYY-MM-DD');
+        if (typeof item.date !== 'string' || (!item.date && !allowEmptyDate) || (item.date && !isValidCalendarDate(item.date))) fail('日期必须是有效的 YYYY-MM-DD');
         const normalizedStatus = normalizeStatus(item.status);
         if (typeof item.status !== 'string' || !statuses.includes(normalizedStatus)) fail('进度状态不受支持');
 
-        const optionalFields = [['time', '时间'], ['position', '岗位'], ['next', '下一步'], ['note', '备注'], ['updatedAt', '更新时间']];
+        const optionalFields = [
+          ['time', '时间'], ['position', '岗位'], ['direction', '方向'], ['type', '类型'],
+          ['city', '城市'], ['channel', '渠道'], ['resumeVersion', '简历版本'],
+          ['next', '下一步'], ['salary', '薪资信息'], ['note', '备注'], ['updatedAt', '更新时间']
+        ];
         const normalized = {};
         optionalFields.forEach(([field, label]) => {
           const value = item[field];
@@ -395,6 +479,7 @@
           else normalized[field] = value;
         });
         if (normalized.time && !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(normalized.time)) fail('时间必须是有效的 HH:mm');
+        if (normalized.type && !applicationTypes.includes(normalized.type)) fail('类型必须是校招、实习、社招或留空');
 
         let id = item.id;
         if (id == null || id === '') {
@@ -409,10 +494,16 @@
           time: normalized.time,
           company: item.company.trim(),
           position: normalized.position,
+          direction: normalized.direction,
+          type: normalized.type,
+          city: normalized.city,
+          channel: normalized.channel,
+          resumeVersion: normalized.resumeVersion,
           status: normalizedStatus,
           next: normalized.next,
+          salary: normalized.salary,
           note: normalized.note,
-          updatedAt: normalized.updatedAt || `${item.date}T${normalized.time}`
+          updatedAt: normalized.updatedAt || defaultUpdatedAt(item)
         };
       }
       function importIssueSummary(issues) {
@@ -421,34 +512,183 @@
         const remaining = issues.length > 5 ? `\n另有 ${issues.length - 5} 条异常记录。` : '';
         return `${visible}${remaining}`;
       }
-      function importJson(file, mode = 'replace') {
+      function findMarkdownTableSection(markdown) {
+        const lines = String(markdown).replace(/\r\n?/g, '\n').split('\n');
+        let start = -1;
+        let headingLevel = 0;
+        for (let index = 0; index < lines.length; index += 1) {
+          const match = lines[index].match(/^(#{1,6})\s+(.+?)\s*$/);
+          if (!match) continue;
+          const title = match[2].replace(/\s+#+$/, '').trim();
+          if (title !== '总表') continue;
+          start = index;
+          headingLevel = match[1].length;
+          break;
+        }
+        if (start < 0) return null;
+        let end = lines.length;
+        for (let index = start + 1; index < lines.length; index += 1) {
+          const match = lines[index].match(/^(#{1,6})\s+/);
+          if (match && match[1].length <= headingLevel) { end = index; break; }
+        }
+        return { lines, start, end };
+      }
+      function decodeMarkdownCell(value) {
+        return String(value)
+          .replace(/<br\s*\/?>/gi, '\n')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;/g, "'")
+          .replace(/&amp;/g, '&');
+      }
+      function splitMarkdownRow(line) {
+        const cells = [];
+        let current = '';
+        for (let index = 0; index < line.length; index += 1) {
+          const char = line[index];
+          const next = line[index + 1];
+          if (char === '\\' && (next === '|' || next === '\\')) {
+            current += next;
+            index += 1;
+          } else if (char === '|') {
+            cells.push(current.trim());
+            current = '';
+          } else current += char;
+        }
+        cells.push(current.trim());
+        if (cells[0] === '') cells.shift();
+        if (cells.length && cells[cells.length - 1] === '') cells.pop();
+        return cells.map(decodeMarkdownCell);
+      }
+      function isMarkdownSeparatorRow(line) {
+        const cells = splitMarkdownRow(line);
+        return cells.length > 0 && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+      }
+      const markdownHeaderFields = {
+        '公司': 'company', '岗位': 'position', '方向': 'direction', '类型': 'type',
+        '城市': 'city', '渠道': 'channel', '简历版本': 'resumeVersion', '状态': 'status',
+        '下一步与日期': 'next', '薪资信息': 'salary', '备注': 'note'
+      };
+      function parseMarkdown(markdown) {
+        const text = String(markdown);
+        const section = findMarkdownTableSection(text);
+        if (!section) throw new Error('Markdown 中缺少“总表”标题');
+        const { lines, start, end } = section;
+        let headerIndex = -1;
+        for (let index = start + 1; index < end; index += 1) {
+          if (lines[index].trim().startsWith('|')) { headerIndex = index; break; }
+        }
+        if (headerIndex < 0 || headerIndex + 1 >= end || !isMarkdownSeparatorRow(lines[headerIndex + 1])) {
+          throw new Error('“总表”章节中缺少有效的 Markdown 表头和分隔行');
+        }
+        const headers = splitMarkdownRow(lines[headerIndex]);
+        if (!headers.includes('公司') || !headers.includes('状态') || !headers.includes('投递日期')) {
+          throw new Error('总表至少需要“公司”“投递日期”“状态”三列');
+        }
+        const records = [];
+        const issues = [];
+        const seenIds = new Set();
+        let sourceRowCount = 0;
+        for (let index = headerIndex + 2; index < end; index += 1) {
+          const line = lines[index].trim();
+          if (!line) continue;
+          if (!line.startsWith('|')) break;
+          if (isMarkdownSeparatorRow(line)) continue;
+          const cells = splitMarkdownRow(line);
+          if (cells.every((cell) => !cell)) continue;
+          sourceRowCount += 1;
+          const item = { id: '', date: '', time: '', updatedAt: '' };
+          headers.forEach((header, cellIndex) => {
+            const value = cells[cellIndex] || '';
+            if (header === '投递日期') {
+              const match = value.match(/^(\d{4}-\d{2}-\d{2})(?:[ T]((?:[01]\d|2[0-3]):[0-5]\d))?$/);
+              if (match) {
+                item.date = match[1];
+                item.time = match[2] || '';
+              } else item.date = value;
+            } else if (markdownHeaderFields[header]) item[markdownHeaderFields[header]] = value;
+          });
+          try { records.push(normalizeImportedRecord(item, sourceRowCount - 1, seenIds, { allowEmptyDate: true })); }
+          catch (error) { issues.push(error.message); }
+        }
+        return { records, issues, sourceRowCount, markdown: text };
+      }
+      function encodeMarkdownCell(value) {
+        return String(value ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\\/g, '\\\\')
+          .replace(/\|/g, '\\|')
+          .replace(/\r\n?|\n/g, '<br>');
+      }
+      function buildMarkdownTable(recordList) {
+        const headers = ['公司', '岗位', '方向', '类型', '城市', '渠道', '投递日期', '简历版本', '状态', '下一步与日期', '薪资信息', '备注'];
+        const lines = [
+          `| ${headers.join(' | ')} |`,
+          `| ${headers.map(() => '---').join(' | ')} |`
+        ];
+        recordList.forEach((item) => {
+          const dateTime = `${item.date || ''}${item.date && item.time ? ` ${item.time}` : ''}`;
+          const values = [item.company, item.position, item.direction, item.type, item.city, item.channel, dateTime, item.resumeVersion, item.status, item.next, item.salary, item.note];
+          lines.push(`| ${values.map(encodeMarkdownCell).join(' | ')} |`);
+        });
+        return lines;
+      }
+      function buildMarkdown(recordList, sourceMarkdown = null) {
+        const tableLines = buildMarkdownTable(recordList);
+        if (sourceMarkdown) {
+          const section = findMarkdownTableSection(sourceMarkdown);
+          if (section) {
+            const before = section.lines.slice(0, section.start + 1);
+            const after = section.lines.slice(section.end);
+            return [...before, '', ...tableLines, '', ...after].join('\n');
+          }
+        }
+        if (sourceMarkdown) return `${sourceMarkdown.replace(/\s+$/, '')}\n\n## 总表\n\n${tableLines.join('\n')}\n`;
+        return `# 投递记录\n\n## 总表\n\n${tableLines.join('\n')}\n\n## 各公司备注\n\n## 更新记录\n`;
+      }
+      function importFile(file, mode = 'replace') {
         const reader = new FileReader();
         reader.onload = () => {
-          let value;
+          const isMarkdown = /\.(?:md|markdown)$/i.test(file.name);
+          let items;
+          let markdown = null;
+          let markdownResult = null;
           try {
-            value = JSON.parse(reader.result);
-          } catch {
-            alert('导入失败：文件不是有效的 JSON。');
-            return;
-          }
-          if (!Array.isArray(value)) {
-            alert('导入失败：备份内容必须是记录数组。');
-            return;
-          }
-          if (!value.length) {
-            alert('导入失败：备份中没有记录。');
+            if (isMarkdown) {
+              markdownResult = parseMarkdown(reader.result);
+              items = markdownResult.records;
+              markdown = markdownResult.markdown;
+            } else {
+              const parsed = parseBackupValue(JSON.parse(reader.result));
+              items = parsed.items;
+              markdown = parsed.markdown;
+              if (!items.length) throw new Error('备份中没有记录');
+            }
+          } catch (error) {
+            alert(`导入失败：${error.message}`);
             return;
           }
 
           const importedRecords = [];
-          const issues = [];
+          const issues = isMarkdown ? [...markdownResult.issues] : [];
           const seenIds = new Set();
-          value.forEach((item, index) => {
-            try { importedRecords.push(normalizeImportedRecord(item, index, seenIds)); }
-            catch (error) { issues.push(error.message); }
-          });
-          if (!importedRecords.length) {
+          if (!isMarkdown) {
+            items.forEach((item, index) => {
+              try { importedRecords.push(normalizeImportedRecord(item, index, seenIds)); }
+              catch (error) { issues.push(error.message); }
+            });
+          } else importedRecords.push(...items);
+
+          const sourceRowCount = isMarkdown ? markdownResult.sourceRowCount : items.length;
+          if (!importedRecords.length && sourceRowCount > 0) {
             alert(`导入失败：没有可导入的有效记录。\n${importIssueSummary(issues)}`);
+            return;
+          }
+          if (mode === 'merge' && !importedRecords.length) {
+            alert('没有可合并的记录。');
             return;
           }
 
@@ -463,21 +703,14 @@
             nextRecords = importedRecords;
             successMessage = `已覆盖导入 ${importedRecords.length} 条有效记录${skippedMessage}。`;
           }
+          const nextMarkdown = mode === 'replace' ? markdown : (trackerDocument.markdown ?? markdown);
 
-          if (mode === 'replace' && records.length) {
+          if (mode === 'replace' && (records.length || trackerDocument.markdown)) {
             const details = issues.length ? `\n\n${importIssueSummary(issues)}` : '';
-            const confirmed = confirm(`现有 ${records.length} 条记录将被 ${importedRecords.length} 条有效记录替换${skippedMessage}。${details}\n\n确定继续导入吗？`);
+            const confirmed = confirm(`现有 ${records.length} 条记录及当前文档将被替换${skippedMessage}。${details}\n\n确定继续导入吗？`);
             if (!confirmed) return;
           }
-
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(nextRecords));
-          } catch {
-            alert('导入失败：无法写入浏览器存储，现有记录未改变。');
-            return;
-          }
-          records = nextRecords;
-          render();
+          if (!commitRecords(nextRecords, nextMarkdown)) return;
           const details = issues.length ? `\n${importIssueSummary(issues)}` : '';
           alert(`${successMessage}${details}`);
         };
@@ -485,7 +718,7 @@
         reader.readAsText(file, 'utf-8');
       }
 
-      populateStatuses(); render();
+      populateStatuses(); populateApplicationTypes(); render();
       $('#addButton').addEventListener('click', () => openModal());
       $('#closeModal').addEventListener('click', closeModal);
       $('#cancelButton').addEventListener('click', closeModal);
@@ -495,29 +728,52 @@
       $('#sortSelect').addEventListener('change', render);
       $('#printButton').addEventListener('click', () => window.print());
       $('#exportCsvButton').addEventListener('click', exportCsv);
+      $('#exportMarkdownButton').addEventListener('click', () => {
+        download('投递记录.md', buildMarkdown(records, trackerDocument.markdown), 'text/markdown;charset=utf-8');
+      });
       $('#importButton').addEventListener('click', () => $('#importInput').click());
       $('#mergeImportButton').addEventListener('click', () => $('#mergeImportInput').click());
       $('#exportJsonButton').addEventListener('click', () => {
-        const backup = JSON.stringify(records, null, 2);
-        download(`秋招投递进度备份-${today()}.json`, backup, 'application/json;charset=utf-8');
+        download(`求职投递进度备份-${today()}.json`, JSON.stringify(makeBackup(), null, 2), 'application/json;charset=utf-8');
       });
-      $('#importInput').addEventListener('change', (event) => { if (event.target.files[0]) importJson(event.target.files[0]); event.target.value = ''; });
-      $('#mergeImportInput').addEventListener('change', (event) => { if (event.target.files[0]) importJson(event.target.files[0], 'merge'); event.target.value = ''; });
+      $('#importInput').addEventListener('change', (event) => { if (event.target.files[0]) importFile(event.target.files[0]); event.target.value = ''; });
+      $('#mergeImportInput').addEventListener('change', (event) => { if (event.target.files[0]) importFile(event.target.files[0], 'merge'); event.target.value = ''; });
       form.addEventListener('submit', (event) => {
         event.preventDefault();
-        const data = { date: dateInput.value, time: timeInput.value, company: companyInput.value.trim(), position: positionInput.value.trim(), status: statusInput.value, next: nextInput.value.trim(), note: noteInput.value.trim() };
+        const data = {
+          date: dateInput.value,
+          time: timeInput.value,
+          company: companyInput.value.trim(),
+          position: positionInput.value.trim(),
+          direction: directionInput.value.trim(),
+          type: typeInput.value,
+          city: cityInput.value.trim(),
+          channel: channelInput.value.trim(),
+          resumeVersion: resumeVersionInput.value.trim(),
+          status: statusInput.value,
+          next: nextInput.value.trim(),
+          salary: salaryInput.value.trim(),
+          note: noteInput.value.trim()
+        };
         if (!data.company) return companyInput.focus();
+        let nextRecords;
         if (editingId) {
           const index = records.findIndex((item) => item.id === editingId);
-          if (index >= 0) records[index] = { ...records[index], ...data, updatedAt: new Date().toISOString() };
-        } else records.push({ id: makeId(), ...data, updatedAt: new Date().toISOString() });
-        persist(); render(); closeModal();
+          if (index < 0) { alert('这条记录已不存在，请刷新后重试。'); return; }
+          nextRecords = records.map((item, itemIndex) => itemIndex === index ? { ...item, ...data, updatedAt: new Date().toISOString() } : item);
+        } else nextRecords = [...records, { id: makeId(), ...data, updatedAt: new Date().toISOString() }];
+        if (commitRecords(nextRecords)) closeModal();
       });
       body.addEventListener('click', (event) => {
         const edit = event.target.closest('[data-edit]');
         const remove = event.target.closest('[data-delete]');
-        if (edit) openModal(records.find((item) => item.id === edit.dataset.edit));
-        if (remove && confirm('确定删除这条投递记录吗？')) { records = records.filter((item) => item.id !== remove.dataset.delete); persist(); render(); }
+        if (edit) {
+          const record = records.find((item) => item.id === edit.dataset.edit);
+          if (record) openModal(record);
+        }
+        if (remove && confirm('确定删除这条投递记录吗？')) {
+          commitRecords(records.filter((item) => item.id !== remove.dataset.delete));
+        }
       });
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && modalBackdrop.classList.contains('open')) closeModal();

@@ -8,10 +8,17 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const sourceDir = path.join(repoRoot, 'assets', 'asu-resume');
 const frameDir = path.join(repoRoot, 'assets', 'frame', 'asu');
 const sharedDir = path.dirname(frameDir);
-const [input, destination] = process.argv.slice(2);
-const custom = input && input !== '--check';
-if (custom && !destination) throw new Error('用法：node scripts/build-asu-resume.mjs <用户内容壳> <输出 HTML>');
-const outputPath = custom ? path.resolve(destination) : path.join(repoRoot, 'assets', 'asu-resume-template.html');
+const [input, destination, ...extraArgs] = process.argv.slice(2);
+const checkMode = input === '--check';
+const writeBaselineMode = input === '--write-baseline';
+const custom = Boolean(input && !checkMode && !writeBaselineMode);
+const baselinePath = path.join(repoRoot, 'assets', 'asu-resume-template.html');
+const usage = '用法：\n  node scripts/build-asu-resume.mjs <用户内容壳> <输出 HTML>\n  node scripts/build-asu-resume.mjs --check\n  node scripts/build-asu-resume.mjs --write-baseline';
+if (!input || (custom && !destination) || (!custom && destination) || extraArgs.length) {
+  console.error(usage);
+  process.exit(2);
+}
+const outputPath = custom ? path.resolve(destination) : baselinePath;
 
 const pathKey = (p) => process.platform === 'win32' ? p.toLowerCase() : p;
 function sameFile(a, b) {
@@ -65,10 +72,14 @@ function build() {
 }
 
 const generated = build();
-if (process.argv[2] === '--check') {
-  const current = fs.readFileSync(outputPath, 'utf8');
+if (checkMode) {
+  if (!fs.existsSync(baselinePath)) {
+    console.error('缺少 ASu 自检基准文件：assets/asu-resume-template.html');
+    process.exit(1);
+  }
+  const current = fs.readFileSync(baselinePath, 'utf8');
   if (generated !== current) {
-    console.error('assets/asu-resume-template.html 与解耦源文件不一致，请运行 npm run build:asu-resume');
+    console.error('assets/asu-resume-template.html 与解耦源文件不一致，请由维护者运行 node scripts/build-asu-resume.mjs --write-baseline');
     process.exit(1);
   }
   console.log('ASu 简历模板生成产物一致');

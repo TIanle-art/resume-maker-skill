@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "language": "zh",
+    "is_deliverable": true,
+    "note": "负向测试用：故意包含未补全标注、示例数据与乱序日期，自检脚本应判为不通过。"
+  },
+  "profile": {
+    "name": "测试用例",
+    "target_role": "前端开发工程师",
+    "phone": "188-0000-0000",
+    "email": "sample@example.com"
+  },
+  "education": [
+    { "dates": "2019.09–2023.06", "school": "示例学院", "major_degree": "软件工程 本科" },
+    { "dates": "2023.09–2026.06", "school": "示例大学", "major_degree": "软件工程 硕士" }
+  ],
+  "experience": [
+    {
+      "dates": "2025.07–至今",
+      "organization": "示例公司",
+      "role": "前端开发实习生",
+      "bullets": [
+        "负责组件库维护，具体提升【待补充】%。",
+        "页面性能优化，加载时间下降【待实测】。"
+      ]
+    }
+  ],
+  "skills": ["JavaScript、TypeScript、Vue 3"],
+  "awards": ["【未完成】开源项目贡献"]
+}
