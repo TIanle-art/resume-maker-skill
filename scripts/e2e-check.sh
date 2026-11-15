@@ -95,6 +95,39 @@ else
   echo "SKIP 未导出 PDF（缺 Chrome/Chromium 或脚本不可用）"
 fi
 
+echo "== 9. JD 样本检查脚本 =="
+python3 - "$WORK" <<'PY'
+import sys, os
+w = sys.argv[1]
+def gen(n, cos, ceil, d):
+    out = ["# JD 样本：自检\n\n## 第 1 轮\n"]
+    for i in range(n):
+        layer = "天花板" if i < ceil else "可投"
+        out.append(f"### J{i+1:03d} 公司{i % cos}｜岗位{i}\n\n- 状态：有效\n- 分层：{layer}\n- 城市：上海\n"
+                   f"- 来源：官网｜材料{i}\n- 抓取日期：{d}\n- 发布日期：{d}\n- 核心职责：做事\n- 核心要求：会做事\n")
+    return "\n".join(out)
+for name, a in {"ok": (22, 11, 6, "2026-11-10"), "few": (8, 5, 2, "2026-11-10"), "old": (22, 11, 6, "2026-07-01")}.items():
+    open(os.path.join(w, f"jd-{name}.md"), "w", encoding="utf-8").write(gen(*a))
+PY
+JD="python3 scripts/check_jd_samples.py --today 2026-11-15"
+# 脚本在非“可直接用”时退出码为 1，这里只看输出文字
+OUT_OK="$($JD "$WORK/jd-ok.md" || true)"; OUT_FEW="$($JD "$WORK/jd-few.md" || true)"; OUT_OLD="$($JD "$WORK/jd-old.md" || true)"
+case "$OUT_OK" in *可直接用*) ok "达标样本判为可直接用" ;; *) bad "达标样本未判为可直接用" ;; esac
+case "$OUT_FEW" in *需要补收*) ok "数量不足判为需要补收" ;; *) bad "数量不足未被拦截" ;; esac
+case "$OUT_OLD" in *需要重收*) ok "过旧样本判为需要重收" ;; *) bad "过旧样本未被拦截" ;; esac
+
+echo "== 10. 建目录脚本 =="
+if python3 scripts/init_workspace.py "$WORK/求职" --direction 自检方向 --company 某司-某岗 >/dev/null \
+   && [ -f "$WORK/求职/求职档案.md" ] && [ -d "$WORK/求职/方向/自检方向/JD截图" ] \
+   && [ -f "$WORK/求职/方向/自检方向/投递/某司-某岗/匹配分析.md" ]; then
+  ok "目录按契约建立"
+else
+  bad "目录建立不符合契约"
+fi
+echo "改过" >> "$WORK/求职/求职档案.md"
+python3 scripts/init_workspace.py "$WORK/求职" >/dev/null
+if tail -1 "$WORK/求职/求职档案.md" | grep -q '改过'; then ok "重复运行不覆盖已有文件"; else bad "重复运行覆盖了已有文件"; fi
+
 echo
 echo "结果：$PASS 项通过，$FAIL 项失败"
 [ "$FAIL" -eq 0 ]

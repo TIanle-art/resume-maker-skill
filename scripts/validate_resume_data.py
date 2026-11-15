@@ -2,7 +2,7 @@
 """resume-data.json 的结构与一致性校验。
 
 用法：
-    python3 scripts/validate_resume_data.py <resume-data.json> [--allow-draft] [--json]
+    python3 scripts/validate_resume_data.py <resume-data.json> [--draft] [--json]
 
 做三件事：
 1. 按 assets/resume-data.schema.json 校验字段、类型、枚举、必填；
@@ -78,7 +78,7 @@ def check_order(section, items, errors):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("data")
-    ap.add_argument("--allow-draft", action="store_true", help="允许【待补充】【待确认】等草稿标注")
+    ap.add_argument("--draft", "--allow-draft", dest="allow_draft", action="store_true", help="允许【待补充】【待确认】等草稿标注")
     ap.add_argument("--json", action="store_true", help="输出机器可读结果")
     args = ap.parse_args()
 

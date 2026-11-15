@@ -136,11 +136,13 @@ assets/
   career-claim-ledger-template.json
   个人信息收集表.md            # 没有简历时，一次性问全所需信息
   求职档案模板.md              # 求职档案（唯一状态源）模板
+  过程文档模板/                # 方向结论、检索词与城市公司、JD样本、差距分析、匹配分析、目标版修改说明
   模板索引.md                  # 4 个壳与可叠加版式类的对照
   asu-resume-template.html     # ASu 构建自检基准（--check 使用）
   application-tracker.html     # 投递记录可视化面板
 fixtures/                     # 自检样例：example 正例、draft 负例
-scripts/                      # 构建、导出、转换、质检与自检脚本
+scripts/                      # 建目录、JD 样本检查、构建、导出、转换、质检与自检脚本
+evals/                        # 行为场景用例（流程规则的验收清单）
 agents/                       # 宿主适配清单（doubao / openai）
 ```
 
@@ -158,6 +160,8 @@ resume-data.json ──build-html.mjs─────────► HTML（自�
 
 | 脚本 | 用途 | 依赖 |
 |---|---|---|
+| `scripts/init_workspace.py` | 按流程建立用户求职目录，只新建不覆盖 | Python 3 |
+| `scripts/check_jd_samples.py` | JD 样本的数量、覆盖、时效与“使用前复查”判定 | Python 3 |
 | `scripts/build-html.mjs` | `resume-data.json` → 自包含 HTML（按 `--variant` 选壳） | Node 18+，零 npm |
 | `scripts/build-docx.py` | `resume-data.json` → 单栏 A4 DOCX | Python + `python-docx` |
 | `scripts/build-asu-resume.mjs` | ASu 模板构建；`--check` 校验自检基准 | Node 18+ |
