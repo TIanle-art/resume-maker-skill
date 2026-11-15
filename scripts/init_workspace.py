@@ -61,9 +61,9 @@ def main() -> int:
     if args.direction:
         check_name("方向名", args.direction)
         d = root / "方向" / args.direction
-        for sub in ("简历", "项目", "投递", "JD截图"):
+        for sub in ("简历", "项目", "投递", "JD原文", "JD截图"):
             mkdir(d / sub, made)
-        for name in ("方向结论.md", "检索词与城市公司.md"):
+        for name in ("方向结论.md", "检索词与城市公司.md", "JD样本.md"):
             copy(tpl / name, d / name, made)
         if args.project:
             check_name("项目名", args.project)

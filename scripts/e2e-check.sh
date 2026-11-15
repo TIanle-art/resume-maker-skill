@@ -118,9 +118,15 @@ OUT_NICHE="$($JD --niche "$WORK/jd-niche.md" || true)"
 case "$OUT_NICHE" in *可直接用*小众*) ok "小众档达标样本判为可直接用" ;; *) bad "小众档判定不符合预期" ;; esac
 case "$OUT_OLD" in *需要重收*) ok "过旧样本判为需要重收" ;; *) bad "过旧样本未被拦截" ;; esac
 
+# 两层结构：方向目录下 JD样本.md（索引）＋ JD原文/（条目）
+mkdir -p "$WORK/dir/JD原文" && cp "$WORK/jd-ok.md" "$WORK/dir/JD原文/第1轮-2026-11-10.md"
+printf '# JD 样本\n\n- 方向规模：常规\n\n| 编号 | 公司 |\n|---|---|\n| J001 | 公司0 |\n' > "$WORK/dir/JD样本.md"
+OUT_DIR="$($JD "$WORK/dir" || true)"
+case "$OUT_DIR" in *可直接用*索引表缺*) ok "方向目录两层结构可读，并提示索引缺条目" ;; *) bad "方向目录两层结构检查不符合预期" ;; esac
+
 echo "== 10. 建目录脚本 =="
 if python3 scripts/init_workspace.py "$WORK/求职" --direction 自检方向 --company 某司-某岗 >/dev/null \
-   && [ -f "$WORK/求职/求职档案.md" ] && [ -d "$WORK/求职/方向/自检方向/JD截图" ] \
+   && [ -f "$WORK/求职/求职档案.md" ] && [ -d "$WORK/求职/方向/自检方向/JD截图" ] && [ -d "$WORK/求职/方向/自检方向/JD原文" ] && [ -f "$WORK/求职/方向/自检方向/JD样本.md" ] \
    && [ -f "$WORK/求职/方向/自检方向/投递/某司-某岗/匹配分析.md" ]; then
   ok "目录按契约建立"
 else

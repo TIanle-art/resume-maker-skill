@@ -4,7 +4,7 @@
 用法：
     python3 scripts/build-docx.py <resume-data.json> <输出.docx> [--variant <仅记录用>]
 
-默认样式遵循 references/07-简历输出与质检.md §2：A4、上下 1.5cm/左右 1.8cm、
+默认样式遵循 references/10-简历输出与质检.md §2：A4、上下 1.5cm/左右 1.8cm、
 姓名 18pt 加粗居中、小标题 12pt 加粗带下划线、正文 10.5pt、行距 1.2、时间倒序。
 依赖 python-docx（无其他第三方依赖）。
 """
@@ -97,7 +97,7 @@ def bullet_items(doc, bullets):
 
 
 def entry(doc, dates, left, right, bullets=None):
-    """首行：左侧单位/项目 + 职位，右侧时间（07 §2 规定）。"""
+    """首行：左侧单位/项目 + 职位，右侧时间（10 §2 规定）。"""
     p = para(doc, space_before=4, space_after=0, line=1.15)
     p.paragraph_format.tab_stops.add_tab_stop(Cm(17.2), WD_TAB_ALIGNMENT.RIGHT)
     style_run(p.add_run(left), size=10.5, bold=True)

@@ -2,13 +2,14 @@
 """检查方向 JD 样本的数量、覆盖与时效，给出“使用前复查”的判定。
 
 用法：
-    python3 scripts/check_jd_samples.py <JD样本.md> [--city 首选城市] [--fast] [--niche] [--today YYYY-MM-DD] [--json]
+    python3 scripts/check_jd_samples.py <方向目录 或 JD样本.md> [--city 首选城市] [--fast] [--niche] [--today YYYY-MM-DD] [--json]
 
-判定（规则见 references/08-JD检索与候选池.md §2.0 与 §6）：
+判定（规则见 references/03-JD收集.md §2.0 与 §6）：
     可直接用 / 需要增量 / 需要重收 / 需要补收
 退出码：0 可直接用；1 需要增量、重收或补收；2 文件无法读取或没有任何条目。
 
-脚本只做计数与日期判断，不判断 JD 内容是否真实，不去重，也不联网；重复发布的岗位在录入时合并为一条。
+输入是方向目录时，读其中的 JD样本.md（索引，取方向规模）与 JD原文/*.md（条目）；
+也可以直接给单个文件。脚本只做计数与日期判断，不判断 JD 内容是否真实，不去重，也不联网；重复发布的岗位在录入时合并为一条。
 """
 from __future__ import annotations
 
@@ -72,9 +73,17 @@ def main() -> int:
 
     path = Path(args.file)
     if not path.exists():
-        print(f"找不到文件：{path}")
+        print(f"找不到：{path}")
         return 2
-    text = path.read_text(encoding="utf-8")
+    index_ids: set[str] = set()
+    if path.is_dir():
+        index = path / "JD样本.md"
+        index_text = index.read_text(encoding="utf-8") if index.exists() else ""
+        index_ids = set(re.findall(r"^\|\s*(J\d+)\s*\|", index_text, re.M))
+        raws = sorted((path / "JD原文").glob("*.md")) if (path / "JD原文").is_dir() else []
+        text = index_text + "\n" + "\n".join(f.read_text(encoding="utf-8") for f in raws)
+    else:
+        text = path.read_text(encoding="utf-8")
     tier = "小众" if (args.niche or NICHE.search(text)) else "常规"
     MIN, GOAL = TIERS[tier]
     entries = parse(text)
@@ -145,6 +154,12 @@ def main() -> int:
         verdict, reason = "可直接用", f"最近一轮在 {age} 天前，数量与覆盖达到最低线"
 
     notes = []
+    if index_ids:
+        ids = {e["id"] for e in entries}
+        if ids - index_ids:
+            notes.append(f"索引表缺 {len(ids - index_ids)} 条原文里有的 JD：" + "、".join(sorted(ids - index_ids)[:5]))
+        if index_ids - ids:
+            notes.append(f"索引表有 {len(index_ids - ids)} 条在原文里找不到：" + "、".join(sorted(index_ids - ids)[:5]))
     if verdict == "可直接用":
         if len(valid) < GOAL["valid"]:
             notes.append(f"有效条数 {len(valid)}，未到目标 {GOAL['valid']}，建议继续补")
