@@ -96,7 +96,7 @@ def count_pages(path: Path, workdir: Path):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("file")
-    ap.add_argument("--draft", action="store_true", help="目标简历或用户决定保留标注的稿子：各类标注只提示、不算失败")
+    ap.add_argument("--draft", action="store_true", help="方向简历（当前版、目标版）或用户决定保留标注的稿子：各类标注只提示、不算失败")
     ap.add_argument("--max-pages", type=int, default=2)
     ap.add_argument("--no-pages", action="store_true", help="跳过页数检查（无 LibreOffice 时）")
     ap.add_argument("--json", action="store_true")
