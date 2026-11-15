@@ -2,7 +2,7 @@
 """检查方向 JD 样本的数量、覆盖与时效，给出“使用前复查”的判定。
 
 用法：
-    python3 scripts/check_jd_samples.py <JD样本.md> [--city 首选城市] [--fast] [--today YYYY-MM-DD] [--json]
+    python3 scripts/check_jd_samples.py <JD样本.md> [--city 首选城市] [--fast] [--niche] [--today YYYY-MM-DD] [--json]
 
 判定（规则见 references/08-JD检索与候选池.md §2.0 与 §6）：
     可直接用 / 需要增量 / 需要重收 / 需要补收
@@ -24,8 +24,11 @@ ENTRY = re.compile(r"^###\s+(J\d+)\s+(.+?)\s*$", re.M)
 FIELD = re.compile(r"^-\s*([^：:]+)[：:]\s*(.*)$", re.M)
 DATE = re.compile(r"(\d{4})-(\d{1,2})-(\d{1,2})")
 
-MIN = {"valid": 20, "companies": 10, "ceiling": 5, "city": 5}
-GOAL = {"valid": 30, "companies": 15}
+TIERS = {
+    "常规": ({"valid": 20, "companies": 10, "ceiling": 5, "city": 5}, {"valid": 30, "companies": 15}),
+    "小众": ({"valid": 10, "companies": 5, "ceiling": 3, "city": 3}, {"valid": 15, "companies": 8}),
+}
+NICHE = re.compile(r"方向规模\s*[：:]\s*小众")
 INVALID = {"已关闭", "已过期", "已下线", "抓取失败"}
 
 
@@ -62,6 +65,7 @@ def main() -> int:
     ap.add_argument("file")
     ap.add_argument("--city", help="首选城市，检查该城市有效条数是否达到最低线")
     ap.add_argument("--fast", action="store_true", help="技术迭代快的方向：时效线从 30/90 天收紧为 14/60 天")
+    ap.add_argument("--niche", action="store_true", help="按小众方向的门槛判定；收集概况里写了“方向规模：小众”时自动启用")
     ap.add_argument("--today", help="用于测试的当前日期 YYYY-MM-DD")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
@@ -70,7 +74,10 @@ def main() -> int:
     if not path.exists():
         print(f"找不到文件：{path}")
         return 2
-    entries = parse(path.read_text(encoding="utf-8"))
+    text = path.read_text(encoding="utf-8")
+    tier = "小众" if (args.niche or NICHE.search(text)) else "常规"
+    MIN, GOAL = TIERS[tier]
+    entries = parse(text)
     if not entries:
         print("没有找到任何 JD 条目（条目标题应为“### J001 公司｜岗位名”）")
         return 2
@@ -145,7 +152,7 @@ def main() -> int:
             notes.append(f"公司 {len(companies)} 家，未到目标 {GOAL['companies']}")
 
     result = {
-        "verdict": verdict, "reason": reason, "entries": len(entries), "valid": len(valid),
+        "verdict": verdict, "reason": reason, "tier": tier, "entries": len(entries), "valid": len(valid),
         "companies": len(companies), "cities": dict(cities), "layers": dict(layers),
         "status": dict(status_count), "latest": latest.isoformat() if latest else None,
         "age_days": age, "dead_ratio": round(dead_ratio, 2), "gaps": gaps,
@@ -154,7 +161,7 @@ def main() -> int:
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
-        print(f"判定：{verdict}——{reason}")
+        print(f"判定：{verdict}——{reason}（按{tier}方向门槛）")
         print(f"条目 {len(entries)}，有效 {len(valid)}，公司 {len(companies)} 家，最近一轮 {result['latest'] or '未知'}")
         print("城市：" + ("、".join(f"{k}×{v}" for k, v in cities.most_common()) or "未填"))
         print("分层：" + ("、".join(f"{k}×{v}" for k, v in layers.most_common()) or "未填"))

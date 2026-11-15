@@ -106,7 +106,7 @@ def gen(n, cos, ceil, d):
         out.append(f"### J{i+1:03d} 公司{i % cos}｜岗位{i}\n\n- 状态：有效\n- 分层：{layer}\n- 城市：上海\n"
                    f"- 来源：官网｜材料{i}\n- 抓取日期：{d}\n- 发布日期：{d}\n- 核心职责：做事\n- 核心要求：会做事\n")
     return "\n".join(out)
-for name, a in {"ok": (22, 11, 6, "2026-11-10"), "few": (8, 5, 2, "2026-11-10"), "old": (22, 11, 6, "2026-07-01")}.items():
+for name, a in {"ok": (22, 11, 6, "2026-11-10"), "few": (8, 5, 2, "2026-11-10"), "old": (22, 11, 6, "2026-07-01"), "niche": (11, 6, 3, "2026-11-10")}.items():
     open(os.path.join(w, f"jd-{name}.md"), "w", encoding="utf-8").write(gen(*a))
 PY
 JD="python3 scripts/check_jd_samples.py --today 2026-11-15"
@@ -114,6 +114,8 @@ JD="python3 scripts/check_jd_samples.py --today 2026-11-15"
 OUT_OK="$($JD "$WORK/jd-ok.md" || true)"; OUT_FEW="$($JD "$WORK/jd-few.md" || true)"; OUT_OLD="$($JD "$WORK/jd-old.md" || true)"
 case "$OUT_OK" in *可直接用*) ok "达标样本判为可直接用" ;; *) bad "达标样本未判为可直接用" ;; esac
 case "$OUT_FEW" in *需要补收*) ok "数量不足判为需要补收" ;; *) bad "数量不足未被拦截" ;; esac
+OUT_NICHE="$($JD --niche "$WORK/jd-niche.md" || true)"
+case "$OUT_NICHE" in *可直接用*小众*) ok "小众档达标样本判为可直接用" ;; *) bad "小众档判定不符合预期" ;; esac
 case "$OUT_OLD" in *需要重收*) ok "过旧样本判为需要重收" ;; *) bad "过旧样本未被拦截" ;; esac
 
 echo "== 10. 建目录脚本 =="

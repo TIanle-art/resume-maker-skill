@@ -52,7 +52,7 @@ description: 通用 Agent 求职与简历工作流：先用用户自己的简历
 求职/
 ├── 求职档案.md                      # 唯一状态源：背景、偏好、状态、文件清单、更新记录
 ├── 通用简历模板.docx                 # ⓪ 唯一底本：用户简历直接用或优化而来，含【岗位】占位符
-├── 通用简历模板.json                 # 可选：选素材库框架时的结构化事实源
+├── 通用简历模板.json                 # 选素材库框架时必有；沿用用户框架时可选，作事实清单
 ├── 历史/                            # 通用简历模板的旧版
 ├── 方向报告.md                      # ① 全部候选方向的调研与对比
 ├── career-claim-ledger.json         # 可选：主张—证据账本
@@ -174,7 +174,7 @@ description: 通用 Agent 求职与简历工作流：先用用户自己的简历
 
 ```bash
 python3 scripts/init_workspace.py <求职目录> [--direction 方向名] [--project 项目名] [--company 公司-岗位]   # 按流程建目录，只新建不覆盖
-python3 scripts/check_jd_samples.py <JD样本.md> [--city 首选城市] [--fast]   # JD 数量、覆盖、时效与复查判定
+python3 scripts/check_jd_samples.py <JD样本.md> [--city 首选城市] [--fast] [--niche]   # JD 数量、覆盖、时效与复查判定
 python3 scripts/validate_resume_data.py <resume-data.json> [--draft]   # 结构化事实校验
 python3 scripts/qa_resume.py <交付文件> [--draft]              # 示例文字/日期/页数；带标注的稿子加 --draft
 bash scripts/e2e-check.sh                                      # 全链路自检（维护者）
