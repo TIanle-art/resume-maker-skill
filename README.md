@@ -14,7 +14,7 @@
 | ⑦ 面试准备 | 面试准备、模拟面试、面后复盘 | `面试准备.md` |
 | ⑧ 投递记录 | 记录投递与进展、复盘转化、比较 offer | `投递记录.md` |
 
-另有两个贯穿文件：主张—证据账本（`career-claim-ledger.json`）与简历输出质检。
+另有三个贯穿文件：主张—证据账本（`career-claim-ledger.json`）、简历输出质检、经历写作标准（实习、项目、科研怎么写到顶配）。
 
 前一步的产出是后一步的输入：① 提供事实；② 在事实之上定方向；③ 按 ② 的检索清单收 JD；④⑤ 综合这批 JD 设计项目、做方向简历；⑥ 从方向简历派生投递简历。
 赶时间时，① 之后可以直接带具体 JD 进 ⑥，③④⑤ 事后补。
@@ -75,6 +75,7 @@
 | ⑧ 投递记录 | [references/08-投递记录.md](references/08-投递记录.md) | `投递记录.md`、`本周投递清单.md` |
 | 证据账本 | [references/09-证据账本.md](references/09-证据账本.md) | `career-claim-ledger.json` |
 | 成稿与质检 | [references/10-简历输出与质检.md](references/10-简历输出与质检.md) | Word/HTML/PDF/LaTeX 与验收记录（含反向污染审计） |
+| 经历写作标准 | [references/11-经历写作标准.md](references/11-经历写作标准.md) | 实习、项目、科研条目的顶配写法、三层升级与自评 |
 
 ### 用户目录契约
 
@@ -123,7 +124,7 @@
 
 ```
 SKILL.md                      # 技能入口：路由表、状态契约与共用规则
-references/                   # 十一个文件（00–10），编号与流程步骤一致，按环节分别读取
+references/                   # 十二个文件（00–11），01–08 与流程步骤一致，09–11 贯穿全程
 assets/
   asu-resume/template.html    # ASu 单栏高密度模板（母版）
   templates-html/             # 4 个壳文件，每个对应一种版式（对照见 assets/模板索引.md）
