@@ -97,7 +97,7 @@ def main() -> int:
 
     check_schema(data, errors)
 
-    for section in ("education", "experience", "projects"):
+    for section in ("education", "experience", "research", "projects"):
         if isinstance(data.get(section), list):
             check_order(section, data[section], errors)
 

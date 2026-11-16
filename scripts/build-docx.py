@@ -20,7 +20,7 @@ from pathlib import Path
 try:
     from docx import Document
     from docx.enum.table import WD_TABLE_ALIGNMENT
-    from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_COLOR_INDEX, WD_TAB_ALIGNMENT
     from docx.oxml import OxmlElement
     from docx.oxml.ns import qn
     from docx.shared import Cm, Pt, RGBColor
@@ -85,6 +85,20 @@ def section_title(doc, text, first=False):
     return p
 
 
+MARK = re.compile(r"(【[^】]*】)")
+
+
+def add_text(p, text, **style):
+    """写入文字；【未完成】【待实测】等标注加黄色底纹，方便用户一眼看到（10 §2）。"""
+    for part in MARK.split(text):
+        if not part:
+            continue
+        run = p.add_run(part)
+        style_run(run, **style)
+        if MARK.fullmatch(part):
+            run.font.highlight_color = WD_COLOR_INDEX.YELLOW
+
+
 def bullet_items(doc, bullets):
     for b in bullets or []:
         text = b if isinstance(b, str) else f"{b.get('label', '')}{b.get('text', '')}"
@@ -93,19 +107,26 @@ def bullet_items(doc, bullets):
         p = para(doc, space_before=1, space_after=1, line=1.2, indent=0.55)
         p.paragraph_format.first_line_indent = Cm(-0.55)
         style_run(p.add_run("• "), size=10.5)
-        style_run(p.add_run(text.strip()), size=10.5)
+        add_text(p, text.strip(), size=10.5)
 
 
-def entry(doc, dates, left, right, bullets=None):
+def entry(doc, dates, left, right, bullets=None, tagline=None, stack=None):
     """首行：左侧单位/项目 + 职位，右侧时间（10 §2 规定）。"""
     p = para(doc, space_before=4, space_after=0, line=1.15)
     p.paragraph_format.tab_stops.add_tab_stop(Cm(17.2), WD_TAB_ALIGNMENT.RIGHT)
-    style_run(p.add_run(left), size=10.5, bold=True)
+    add_text(p, left, size=10.5, bold=True)
     if right:
-        style_run(p.add_run(" · " + right), size=10.5)
+        add_text(p, " · " + right, size=10.5)
     p.add_run("\t")
     style_run(p.add_run(dates or ""), size=10, bold=True, color=MUTED)
+    if tagline:
+        tp = para(doc, space_before=1, space_after=1, line=1.2)
+        add_text(tp, tagline.strip(), size=10, color=MUTED)
     bullet_items(doc, bullets)
+    if stack:
+        sp = para(doc, space_before=1, space_after=1, line=1.2)
+        style_run(sp.add_run("技术栈："), size=10, bold=True)
+        add_text(sp, stack.strip(), size=10)
 
 
 def section_lines(doc, title, lines, first=False):
@@ -182,11 +203,12 @@ def build(data, out_path):
     if data.get("summary"):
         section_title(doc, "个人简介")
         sp = para(doc, space_after=2)
-        style_run(sp.add_run(data["summary"]), size=10.5)
+        add_text(sp, data["summary"], size=10.5)
 
     edu = data.get("education") or []
     exp = data.get("experience") or []
     proj = data.get("projects") or []
+    research = data.get("research") or []
     campus_first = not exp
 
     def add_education(first=False):
@@ -201,21 +223,30 @@ def build(data, out_path):
             return
         section_title(doc, "实习与工作经历")
         for e in exp:
-            entry(doc, e.get("dates"), e.get("organization", ""), e.get("role", ""), e.get("bullets"))
+            entry(doc, e.get("dates"), e.get("organization", ""), e.get("role", ""), e.get("bullets"), e.get("tagline"), e.get("stack"))
+
+    def add_research():
+        if not research:
+            return
+        section_title(doc, "科研经历")
+        for e in research:
+            entry(doc, e.get("dates"), e.get("name", ""), e.get("role", ""), e.get("bullets"), e.get("tagline"), e.get("stack"))
 
     def add_projects():
         if not proj:
             return
         section_title(doc, "项目经历")
         for e in proj:
-            entry(doc, e.get("dates"), e.get("name", ""), e.get("role", ""), e.get("bullets"))
+            entry(doc, e.get("dates"), e.get("name", ""), e.get("role", ""), e.get("bullets"), e.get("tagline"), e.get("stack"))
 
     if campus_first:
         add_education()
         add_experience()
+        add_research()
         add_projects()
     else:
         add_experience()
+        add_research()
         add_projects()
         add_education()
 

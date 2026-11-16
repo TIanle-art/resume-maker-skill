@@ -21,6 +21,7 @@ body { margin:0; padding:76px 18px 42px !important; color:var(--ink); font-famil
 .entry-head .org { color:#1d2630; }
 .entry-head .role { text-align:right; color:#293846; }
 .entry-copy { margin:4px 0; }
+.resume-mark { background:#fff3a3; color:inherit; padding:0 1px; }
 .bullet-list { margin:4px 0 0; padding-left:22px; }
 .bullet-list li { margin:4px 0; padding-left:3px; }
 .section-copy { margin:6px 0; }

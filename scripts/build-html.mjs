@@ -30,12 +30,15 @@ const esc = (s) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
+// 【未完成】【待实测】等标注加底色，和 Word 输出一致；输入已转义。
+const mark = (html) => html.replace(/【[^】]*】/g, (m) => `<mark class="resume-mark">${m}</mark>`);
+
 function bulletItems(bullets) {
   if (!Array.isArray(bullets) || !bullets.length) return '';
   const items = bullets
     .map((b) => (typeof b === 'string' ? esc(b) : `${esc(b.label || '')}${esc(b.text || '')}`))
     .filter(Boolean)
-    .map((t) => `<li>${t}</li>`)
+    .map((t) => `<li>${mark(t)}</li>`)
     .join('');
   return items ? `<ul class="bullet-list">${items}</ul>` : '';
 }
@@ -53,8 +56,10 @@ function entries(list, { title, en, orgKey, roleKey, nameKey }) {
       const org = item[orgKey] || item[nameKey] || '';
       const role = item[roleKey] || '';
       const head = `<div class="entry-head"><span class="date">${esc(item.dates || '')}</span><strong class="org">${esc(org)}</strong><strong class="role">${esc(role)}</strong></div>`;
-      const copy = item.text ? `<p class="entry-copy">${esc(item.text)}</p>` : '';
-      return `<article class="entry">${head}${copy}${bulletItems(item.bullets)}</article>`;
+      const lead = item.tagline || item.text;
+      const copy = lead ? `<p class="entry-copy">${mark(esc(lead))}</p>` : '';
+      const stack = item.stack ? `<p class="entry-copy entry-stack"><strong>技术栈：</strong>${mark(esc(item.stack))}</p>` : '';
+      return `<article class="entry">${head}${copy}${bulletItems(item.bullets)}${stack}</article>`;
     })
     .join('');
   return section(title, en, body);
@@ -64,7 +69,7 @@ function standalone(title, en, list) {
   if (!Array.isArray(list) || !list.length) return '';
   const items = list
     .map((x) => (typeof x === 'string' ? esc(x) : `${esc(x.label || '')}${esc(x.text || '')}`))
-    .map((t) => `<li>${t}</li>`)
+    .map((t) => `<li>${mark(t)}</li>`)
     .join('');
   return section(title, en, `<ul class="bullet-list standalone">${items}</ul>`);
 }
@@ -86,6 +91,7 @@ function buildMain(data, photoRef) {
     data.summary ? section('个人简介', 'Profile', `<p class="section-copy">${esc(data.summary)}</p>`) : '',
     entries(data.education, { title: '教育背景', en: 'Education', orgKey: 'school', roleKey: 'major_degree' }),
     entries(data.experience, { title: '实习与工作经历', en: 'Experience', orgKey: 'organization', roleKey: 'role' }),
+    entries(data.research, { title: '科研经历', en: 'Research', nameKey: 'name', roleKey: 'role' }),
     entries(data.projects, { title: '项目经历', en: 'Projects', nameKey: 'name', roleKey: 'role' }),
     standalone('技能证书', 'Skills', data.skills),
     standalone('荣誉与奖项', 'Honors', data.awards),

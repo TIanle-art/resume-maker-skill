@@ -100,13 +100,34 @@ const renderExperience = (experience = []) =>
       .map((item) =>
         [
           `\\asuentry{${joinParts([item.organization, item.role], ' · ')}}{${escapeLatex(item.dates)}}`,
+          item.tagline ? escapeLatex(item.tagline) + '\\par' : '',
           renderBullets(item.bullets),
+          item.stack ? `\\textbf{技术栈：}${escapeLatex(item.stack)}\\par` : '',
         ]
           .filter(Boolean)
           .join('\n'),
       )
       .join('\n\\vspace{3pt}\n'),
   );
+
+const renderResearch = (research = []) =>
+  research.length
+    ? section(
+        '科研经历',
+        research
+          .map((item) =>
+            [
+              `\\asuentry{${joinParts([item.name, item.role], ' · ')}}{${escapeLatex(item.dates)}}`,
+              item.tagline ? escapeLatex(item.tagline) + '\\par' : '',
+              renderBullets(item.bullets),
+              item.stack ? `\\textbf{技术栈：}${escapeLatex(item.stack)}\\par` : '',
+            ]
+              .filter(Boolean)
+              .join('\n'),
+          )
+          .join('\n\\vspace{3pt}\n'),
+      )
+    : '';
 
 const renderProjects = (projects = []) =>
   section(
@@ -115,11 +136,12 @@ const renderProjects = (projects = []) =>
       .map((item) =>
         [
           `\\textbf{${escapeLatex(item.name)}}\\par`,
-          item.summary ? escapeLatex(item.summary) + '\\par' : '',
+          item.tagline || item.summary ? escapeLatex(item.tagline || item.summary) + '\\par' : '',
           // \url 单独成行：长链接没有空格，放进 \hfill 右栏会溢出页边距，
           // hyperref 的 \url 允许在 / 和 . 处断行，同时保持可点击。
           item.url ? `\\url{${escapeUrl(item.url)}}\\par` : '',
           renderBullets(item.bullets),
+          item.stack ? `\\textbf{技术栈：}${escapeLatex(item.stack)}\\par` : '',
         ]
           .filter(Boolean)
           .join('\n'),
@@ -169,7 +191,8 @@ export function renderResume(data, template, preamble = defaultPreamble()) {
   out = replaceRequired(out, '% @HEADLINE', headline ? `\\asumeta{${headline}}` : '');
   out = replaceRequired(out, '% @EDUCATION', renderEducation(data.education));
   out = replaceRequired(out, '% @EXPERIENCE', renderExperience(data.experience));
-  out = replaceRequired(out, '% @PROJECTS', renderProjects(data.projects));
+  // 母版没有单独的科研占位，科研经历排在项目经历之前、同一位置输出。
+  out = replaceRequired(out, '% @PROJECTS', [renderResearch(data.research), renderProjects(data.projects)].filter(Boolean).join('\n'));
   out = replaceRequired(out, '% @SCHOOL', section('校园经历', renderBullets(data.school)));
   out = replaceRequired(out, '% @SKILLS', section('专业技能', renderBullets(data.skills)));
   out = replaceRequired(out, '% @SELF_EVALUATION', section('自我评价', renderBullets(data.self_evaluation)));

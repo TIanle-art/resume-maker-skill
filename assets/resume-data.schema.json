@@ -92,6 +92,10 @@
     "experience": {
       "$ref": "#/definitions/experience_entries"
     },
+    "research": {
+      "$ref": "#/definitions/research_entries",
+      "description": "科研经历（可选）"
+    },
     "projects": {
       "$ref": "#/definitions/projects"
     },
@@ -208,6 +212,14 @@
             "items": {
               "$ref": "#/definitions/bullet"
             }
+          },
+          "tagline": {
+            "type": "string",
+            "description": "一句话定位：做什么、为谁、规模多大（11-经历写作标准 §2）"
+          },
+          "stack": {
+            "type": "string",
+            "description": "技术栈行，按 JD 高频用词排序"
           }
         }
       }
@@ -266,6 +278,56 @@
           "role": {
             "type": "string",
             "minLength": 1
+          },
+          "bullets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/bullet"
+            }
+          },
+          "tagline": {
+            "type": "string",
+            "description": "一句话定位：做什么、为谁、规模多大（11-经历写作标准 §2）"
+          },
+          "stack": {
+            "type": "string",
+            "description": "技术栈行，按 JD 高频用词排序"
+          }
+        }
+      }
+    },
+    "research_entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "dates",
+          "name",
+          "role"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "dates": {
+            "$ref": "#/definitions/dates"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "课题或论文题目"
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "角色或作者排序，按真实情况"
+          },
+          "tagline": {
+            "type": "string",
+            "description": "一句话定位：做什么、为谁、规模多大（11-经历写作标准 §2）"
+          },
+          "stack": {
+            "type": "string",
+            "description": "技术栈行，按 JD 高频用词排序"
           },
           "bullets": {
             "type": "array",

@@ -75,6 +75,24 @@ else
   bad "DOCX 生成失败"
 fi
 
+echo "== 6b. DOCX 的定位句、技术栈行、科研栏与标注底纹 =="
+if python3 - "$WORK" <<'PY'
+import json, subprocess, sys
+from docx import Document
+w = sys.argv[1]
+d = json.load(open("fixtures/resume-data.example.json", encoding="utf-8"))
+d["projects"][0]["bullets"].append("搭建评测集并完成基线对比【未完成】，命中率目标 89%【待实测】")
+json.dump(d, open(f"{w}/marked.json", "w", encoding="utf-8"), ensure_ascii=False)
+subprocess.run(["python3", "scripts/build-docx.py", f"{w}/marked.json", f"{w}/marked.docx"], check=True, capture_output=True)
+doc = Document(f"{w}/marked.docx")
+texts = [p.text for p in doc.paragraphs]
+marked = [r.text for p in doc.paragraphs for r in p.runs if r.font.highlight_color]
+ok = ("科研经历" in texts and any(t.startswith("技术栈：") for t in texts)
+      and d["projects"][0]["tagline"] in texts and marked == ["【未完成】", "【待实测】"])
+sys.exit(0 if ok else 1)
+PY
+then ok "DOCX 输出定位句、技术栈行、科研栏，标注带底纹"; else bad "DOCX 新版式或标注底纹不符合预期"; fi
+
 echo "== 7. 质检应拦截含标注的稿子 =="
 if node scripts/build-html.mjs --shell assets/templates-html/variant-black-后端分布式.html \
      fixtures/resume-data.draft.json "$WORK/draft.html" >/dev/null 2>&1; then
