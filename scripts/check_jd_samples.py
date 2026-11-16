@@ -160,6 +160,8 @@ def main() -> int:
             notes.append(f"索引表缺 {len(ids - index_ids)} 条原文里有的 JD：" + "、".join(sorted(ids - index_ids)[:5]))
         if index_ids - ids:
             notes.append(f"索引表有 {len(index_ids - ids)} 条在原文里找不到：" + "、".join(sorted(index_ids - ids)[:5]))
+    if valid and layers.get("天花板", 0) * 3 < len(valid):
+        notes.append(f"校招与社招（天花板层）{layers.get('天花板', 0)} 条，不到有效样本的三分之一；找实习时也要多收校招与社招 JD")
     if verdict == "可直接用":
         if len(valid) < GOAL["valid"]:
             notes.append(f"有效条数 {len(valid)}，未到目标 {GOAL['valid']}，建议继续补")
